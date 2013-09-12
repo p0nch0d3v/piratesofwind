@@ -1,0 +1,217 @@
+var game = game || {};
+
+game.canvas = {};
+game.player = new player();
+game.wind = new wind();
+game.island = new island();
+game.points = Array();
+game.level = new level();
+game.obstacles = Array();
+game.currentLevel = 0;
+game.cellWidth = undefined;
+game.cellHeight = undefined;
+//game.velocity = 10;
+
+game.init = function() {
+    this.loadLevel(this.currentLevel);
+    this.initializeCanvas();
+    //this.drawLevelObstacles();
+    this.drawGrid();
+    //this.initIsland();
+    this.initPlayer();
+    this.initWind();
+}
+
+game.initializeCanvas = function () {
+    this.canvas.background = document.getElementById('canvasBackground');
+    this.canvas.obstacles = document.getElementById('canvasObstacles');
+    this.canvas.player = document.getElementById('canvasPlayer');
+<<<<<<< HEAD
+    this.canvas.wind = document.getElementById('canvasWind');
+=======
+    ////this.canvas.wind = document.getElementById('canvasWind');
+>>>>>>> master
+    this.canvas.grid = document.getElementById('canvasGrid');
+
+    ////var definedWidth = 860; //window.innerWidth - 1;
+    ////var definedHeight = 480; //window.innerHeight - 60;
+
+<<<<<<< HEAD
+    this.canvas.background.width =
+        this.canvas.obstacles.width =
+            this.canvas.player.width =
+                this.canvas.wind.width =
+                    this.canvas.grid.width = 860;
+                        // window.innerWidth - 1;
+    this.canvas.background.height =
+        this.canvas.obstacles.height =
+            this.canvas.player.height =
+                this.canvas.wind.height =
+                    this.canvas.grid.height = 480;
+                        //window.innerHeight - 65;
+
+    var windowWidth = 860;
+    //window.innerWidth - 1;
+    var windowHeight = 480;
+    //window.innerHeight - 60;
+
+    /*if(windowWidth < windowHeight) {
+        windowHeight = windowWidth;
+=======
+    /*if(definedWidth < definedHeight) {
+        definedHeight = definedWidth;
+>>>>>>> master
+    }
+    else if(definedHeight < definedWidth){
+        definedWidth = definedHeight;
+    }*/
+
+<<<<<<< HEAD
+    this.canvas.background.width = windowWidth;
+    this.canvas.obstacles.width = windowWidth;
+    this.canvas.player.width = windowWidth;
+    this.canvas.wind.width = windowWidth;
+    this.canvas.grid.width = windowWidth;
+    
+    this.canvas.background.height = windowHeight;
+    this.canvas.obstacles.height = windowHeight;
+    this.canvas.player.height = windowHeight;
+    this.canvas.wind.height = windowHeight;
+    this.canvas.grid.height = windowHeight;
+=======
+    ////this.canvas.background.width = definedWidth;
+    ////this.canvas.obstacles.width = definedWidth;
+    ////this.canvas.player.width = definedWidth;
+    ////this.canvas.wind.width = definedWidth;
+    ////this.canvas.grid.width = definedWidth;
+
+    ////this.canvas.background.height = definedHeight;
+    ////this.canvas.obstacles.height = definedHeight;
+    ////this.canvas.player.height = definedHeight;
+    ////this.canvas.wind.height = definedHeight;
+    ////this.canvas.grid.height = definedHeight;
+>>>>>>> master
+
+    this.canvas.backgroundContext = this.canvas.background.getContext('2d');
+    this.canvas.obstaclesContext = this.canvas.obstacles.getContext('2d');
+    this.canvas.playerContext = this.canvas.player.getContext('2d');
+    this.canvas.windContext = this.canvas.wind.getContext('2d');
+    this.canvas.gridContext = this.canvas.grid.getContext('2d');
+
+    this.cellWidth = this.canvas.background.width / this.level.getColCount();
+    this.cellHeight = this.canvas.background.height / this.level.getRowCount();
+
+    // Calculate the margin left, due the canvas are positioned in abosolute
+    var marginLeft = (window.innerWidth - game.canvas.grid.width) / 2;
+
+    this.canvas.background.style.marginLeft = marginLeft + "px";
+    this.canvas.obstacles.style.marginLeft = marginLeft + "px";
+    this.canvas.player.style.marginLeft = marginLeft + "px";
+    this.canvas.wind.style.marginLeft = marginLeft + "px";
+    this.canvas.grid.style.marginLeft = marginLeft + "px";
+
+}
+
+game.loadLevel = function(pLevel){
+    this.level = levels[pLevel];
+    document.getElementById('levelNum').innerHTML = 'Level: ' + this.level.num;
+    document.getElementById('levelWindDirection').innerHTML = 'Wind: ' + this.level.direction;
+}
+
+game.drawLevelObstacles = function() {
+    var levelObstacles = this.level.matrix; ////levels.matrix[game.levelNum];
+	this.obstacles = [];
+	for (i = 0; i < this.level.getColCount(); i++) {
+		for (j = 0; j < this.level.getRowCount(); j++) {
+			if (levelObstacles[j][i] == 's') {
+				var newObstacle = new obstacle();
+				Xi = (i*(this.canvas.obstacles.width/this.level.getColCount())) + (this.canvas.obstacles.width/(this.level.getColCount()*2));
+				Yi = (j*(this.canvas.obstacles.height/this.level.getRowCount())) + (this.canvas.obstacles.height/(this.level.getRowCount()*2));
+                newObstacle.init();
+                newObstacle.setLocation(Xi, Yi);
+				newObstacle.draw();
+				this.obstacles.push(newObstacle);
+			}
+		}
+    }
+}
+
+game.initPlayer = function() {
+    this.player.init();
+    if (this.level.direction == 'east') { // left to right
+        this.player.col = 0;
+        //this.player.row = 0;
+        this.player.row = this.getNumberRandom(0, this.level.getColCount() - 1);
+        var posX = this.player.col * this.cellWidth;
+        var posY = this.player.row * this.cellHeight;
+        this.player.setLocation(posX, posY);
+        this.player.draw();
+    }
+
+    //this.canvas.playerContext.rotate(30 * Math.PI / 180);
+    this.player.animable = true;
+    this.player.animate();
+}
+
+game.initWind = function(){
+
+    this.wind.CartesianCoordinates = [[1,1],[5,1],[8,1],[2,3],[7,3],[1,5],[5,5],[8,5],[2,7],[7,7],[1,8],[5,8],[8,8]];
+    this.wind.init();
+
+    var i = 0;
+    for (var coordinate in this.wind.CartesianCoordinates) {
+        this.wind.AbsoluteCoordinates[coordinate][0] = this.wind.CartesianCoordinates[coordinate][0] * this.cellWidth;
+        this.wind.AbsoluteCoordinates[coordinate][1] = this.wind.CartesianCoordinates[coordinate][1] * this.cellHeight;
+        //console.log('Coordenadas iniciales para '+(i++)+': '+this.wind.AbsoluteCoordinates[coordinate][0]+', '+this.wind.AbsoluteCoordinates[coordinate][1]);
+    }
+
+    this.wind.draw();
+
+    this.wind.animate(/*startTime*/);
+}
+game.getNumberRandom = function (pMin, pMax) {
+	return Math.floor((Math.random()*pMax) + pMin);
+}
+
+game.initIsland = function(){
+    this.island.init();
+    if(this.level.direction == 'east') {
+        this.island.col = this.levelCols - 1;
+        this.island.row = this.getNumberRandom(0, this.level.getColCount() - 1);
+        var posX = this.island.col * this.cellWidth;
+        var posY = this.island.row * this.cellHeight;
+        this.island.setLocation(posX, posY);
+        this.island.setDimension(this.cellWidth, this.cellHeight, true);
+        this.island.draw();
+    }
+    ////game.island.setLocation()
+}
+
+game.drawGrid = function() {
+    for(var i = 0; i < this.level.getColCount(); i++) {
+        this.canvas.gridContext.beginPath();
+        this.canvas.gridContext.moveTo(this.cellWidth * i, 0);
+        this.canvas.gridContext.lineTo(this.cellWidth * i, this.canvas.grid.height);
+        this.canvas.gridContext.stroke();
+    }
+    for(var i = 0; i < this.level.getRowCount(); i++) {
+        this.canvas.gridContext.beginPath();
+        this.canvas.gridContext.moveTo(0, this.cellHeight * i);
+        this.canvas.gridContext.lineTo(this.canvas.grid.width,  this.cellHeight * i);
+        this.canvas.gridContext.stroke();
+    }
+}
+
+game.getNumber = function(n) { return Number(String(n).replace(/\..*/, "")) }
+game.getDecimal = function(n) { return Number(String(n).replace(/\.*./, "")) }
+
+window.onload = function() {
+    game.init();
+}
+
+window.requestAnimFrame = (function(callback) {
+    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+})();

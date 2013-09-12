@@ -1,0 +1,173 @@
+function item () {
+	this.posX = -1;
+	this.posY = -1;
+	this.width = 0;
+	this.height = 0;
+    this.col = -1;
+    this.row = -1;
+	this.fillColor = '';
+    this.lineColor = '';
+    this.type = ''; // player, spiral, windy, island
+    this.context = undefined;
+    this.canvas = undefined;
+    this.inclination = 0;
+    this.animable = false;
+}
+item.prototype.toString = function() {
+    return "item";
+}
+item.prototype.setLocation = function(pX, pY) {
+    if (typeof pX == 'number' && pX <= this.canvas.width && pX >=0) {
+        this.posX = pX;
+    }
+    if (typeof pY == 'number' && pY <= this.canvas.height && pY >= 0) {
+        this.posY = pY;
+    }
+
+}
+item.prototype.setDimension = function(pWidth, pHeight, pSquare) {
+    this.width = pWidth;
+    this.height = pHeight;
+    /*if(pSquare) {
+        if(this.width < this.height) {
+            this.height = pWidth;
+        }
+        else if (this.height < this.width) {
+            this.width = pHeight
+        }
+    }*/
+}
+item.prototype.draw = function() {
+    this.context.lineWidth = 1;
+    if(this.type == 'player') {
+        this.drawPlayer();
+    }
+    else if (this.type == 'spiral') {
+        this.drawSpiral();
+
+    } else if (this.type == 'wind') {
+        this.drawWind();
+    }
+    else if (this.type == 'island') {
+        this.drawIsland();
+    }
+<<<<<<< HEAD
+    if (this.fillColor) {
+        this.context.fillStyle = this.fillColor;
+        this.context.fill();
+    }
+=======
+    this.context.fillStyle = this.fillColor;
+    this.context.lineColor = this.lineColor;
+    this.context.fill();
+>>>>>>> master
+    this.context.stroke();
+}
+item.prototype.drawPlayer = function() {
+    // clear the canvas
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // save the canvas context state for possible rotation
+    this.context.save();
+    this.context.beginPath();
+    var tempX = this.posX;
+    var tempY = this.posY;
+    if(this.inclination != 0) {
+        // rotate !
+        this.context.translate(this.posX, this.posY);
+        console.log('x ' + this.posX);
+        console.log('y ' + this.posY);
+        this.context.rotate(this.inclination * Math.PI / 180);
+        this.posX = 0;
+        this.posY = 0;
+    }
+
+    var x = this.posX + (this.width * 0.125);
+    var y = this.posY + (this.height / 2);
+    this.context.moveTo(x, y);
+
+    x = this.posX + this.width - (this.width * 0.125);
+    y = this.posY + (this.height / 2);
+    this.context.lineTo(x, y);
+
+    x = this.posX + (this.width * 0.75);
+    y = this.posY + this.height - (this.height * 0.25);
+    this.context.lineTo(x, y);
+
+    x = this.posX + (this.width * 0.25);
+    y = this.posY + this.height - (this.height * 0.25);
+    this.context.lineTo(x, y);
+
+    this.context.closePath();
+
+    x = this.posX + (this.width / 2);
+    y = this.posY + (this.height * 0.125);
+    this.context.moveTo(x, y);
+
+    x = this.posX + (this.width * 0.375);
+    y = this.posY + (this.height / 2);
+    this.context.lineTo(x, y);
+
+    x = this.posX + (this.width * 0.625);
+    y = this.posY + (this.height / 2);
+    this.context.lineTo(x, y);
+
+    this.context.closePath();
+    this.context.restore();
+
+    this.posX = tempX;
+    this.posY = tempY;
+}
+item.prototype.drawSpiral = function() {
+    this.context.strokeStyle = 'blue';
+
+    var a = this.width*this.height; //3360
+    var r = t = 2 * (a / 3360);
+    console.log('Cell area: '+a+'('+this.width+'X'+this.height+')');
+
+    this.context.lineWidth = r;
+    // var r = 2;
+    for (var i=0; i<100; i++) {
+        var angle = i * 2 * Math.PI / 30;
+        this.context.lineTo(this.posX+r*Math.cos(angle),this.posY+r*Math.sin(angle));
+        r += 0.15 * (t);
+    }
+    //this.context.stroke();
+}
+item.prototype.drawWind = function(){
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+
+    for (coordinates in this.AbsoluteCoordinates) {
+        var xoff = this.AbsoluteCoordinates[coordinates][0];
+        var yoff = this.AbsoluteCoordinates[coordinates][1];
+        //console.log('Wind direction: '+this.windDirection);
+        this.context.globalAlpha = this.alpha;
+        this.context.strokeStyle = 'blue';
+        this.context.lineWidth = 2;
+        switch(game.level.direction) {
+            case 'east':
+                this.context.moveTo(5 + xoff, 28 + yoff);
+                this.context.bezierCurveTo(-10 + xoff, 28 + yoff, 55 + xoff, 32 + yoff, 66 + xoff, 22 + yoff);
+                this.context.bezierCurveTo(83 + xoff, 6 + yoff, 50 + xoff, 12 + yoff, 48 + xoff, 21 + yoff);
+            break;
+            case 'west':
+                this.context.moveTo(88 + xoff, 51 + yoff);
+                this.context.bezierCurveTo(73 + xoff, 51 + yoff, 22 + xoff, 63 + yoff, 27 + xoff, 49 + yoff);
+                this.context.bezierCurveTo(30 + xoff, 40 + yoff, 56 + xoff, 39 + yoff, 43 + xoff, 46 + yoff);
+            break;
+            case 'north':
+                this.context.moveTo(30 + xoff, 58 + yoff);
+                this.context.bezierCurveTo(30 + xoff, 43 + yoff, 20 + xoff, 16 + yoff, 35 + xoff, 17 + yoff);
+                this.context.bezierCurveTo(45 + xoff, 18 + yoff, 48 + xoff, 37 + yoff, 35 + xoff, 30 + yoff);
+            break;
+            case 'south':
+                this.context.moveTo(23 + xoff, 15 + yoff);
+                this.context.bezierCurveTo(22 + xoff, 0 + yoff, 20 + xoff, 43 + yoff, 26 + xoff, 57 + yoff);
+                this.context.bezierCurveTo(30 + xoff, 67 + yoff, 50 + xoff, 53 + yoff, 34 + xoff, 42 + yoff);
+            break;
+        }
+    }
+}
+item.prototype.drawIsland = function(){
+
+}
