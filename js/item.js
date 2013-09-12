@@ -71,7 +71,7 @@ item.prototype.draw = function() {
 }
 item.prototype.drawPlayer = function() {
     // clear the canvas
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.clearRect(0, 0, this.canvas.width - this.width, this.canvas.height);
     // save the canvas context state for possible rotation
     this.context.save();
     this.context.beginPath();
@@ -187,10 +187,24 @@ item.prototype.drawWind = function(){
     }
 }
 item.prototype.drawIsland = function(){
+    //this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    var centerX = this.posX + (this.width / 2);
+    var centerY = this.posY + (this.height / 2);
+    var radius = this.height / 2;
+    this.context.beginPath();
+    this.context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    this.context.lineWidth = 2;
+    this.context.moveTo(this.posX + (this.height / 2), this.posY);
+    this.context.lineTo(this.posX + this.width - (this.height / 2), this.posY + this.height);
 
+    this.context.moveTo(this.posX + this.width - (this.height / 2), this.posY);
+    this.context.lineTo(this.posX + (this.height / 2), this.posY + this.height);
+    this.context.lineJoin = 'round';
+    this.context.stroke();
 }
 item.prototype.drawSkull = function (){
-    this.cleanSlate();
+    ////this.cleanSlate();
+    this.context.clearRect(0, 0, this.canvas.width - this.width, this.canvas.height);
     with(this.context) {
         beginPath();
         translate(this.posX+game.cellWidth/2,this.posY);

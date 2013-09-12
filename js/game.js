@@ -18,9 +18,9 @@ game.init = function() {
     this.initializeCanvas();
     this.drawLevelObstacles();
     ////this.drawGrid();
-    //this.initIsland();
     this.initPlayer();
     this.initWind();
+    this.initIsland();
 }
 
 game.initializeCanvas = function () {
@@ -124,16 +124,19 @@ game.getNumberRandom = function (pMin, pMax) {
 
 game.initIsland = function(){
     this.island.init();
-    if(this.level.direction == 'east') {
-        this.island.col = this.levelCols - 1;
+    if (this.level.direction == 'east') { // left to right
+        this.island.col = 9;
+        //this.player.row = 0;
         this.island.row = this.getNumberRandom(0, this.level.getColCount() - 1);
         var posX = this.island.col * this.cellWidth;
         var posY = this.island.row * this.cellHeight;
         this.island.setLocation(posX, posY);
-        this.island.setDimension(this.cellWidth, this.cellHeight, true);
         this.island.draw();
     }
-    ////game.island.setLocation()
+
+    //this.canvas.playerContext.rotate(30 * Math.PI / 180);
+    this.player.animable = true;
+    this.player.animate();
 }
 
 /*game.drawGrid = function() {
