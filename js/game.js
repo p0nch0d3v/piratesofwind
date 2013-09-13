@@ -185,9 +185,11 @@ game.showInformation = function(pTitle, pContent, pButtonLabel, pButtonAction)
 
     var title = document.getElementById('information_title');
     title.innerText = pTitle;
+    title.innerHTML = pTitle;
 
     var content = document.getElementById('information_explanation');
     content.innerText = pContent;
+    content.innerHTML = pContent;
 
     var button = document.getElementById('information_action');
     button.value = pButtonLabel;
