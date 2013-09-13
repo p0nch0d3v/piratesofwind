@@ -2,9 +2,10 @@ function player () {
 
 }
 player.prototype = Object.create(item.prototype);
-player.prototype.type = 'player';
+////player.prototype.type = 'player';
 player.prototype.init = function () {
     this.setDimension(game.cellWidth, game.cellHeight, false);
+    this.type = 'player';
     this.fillColor = 'white';
     this.lineColor = 'red';
     this.inclination = 0;
@@ -17,11 +18,11 @@ player.prototype.init = function () {
             var keyPressed = e.keyCode || e.which;
             if(keyPressed == 38){ // up
                 game.player.inclination =  -3;
-                game.player.setLocation(undefined, game.player.posY -= 0.35);
+                game.player.setLocation(undefined, game.player.posY -= 0.45);
             }
             else if (keyPressed == 40){ // down
                 game.player.inclination =  3;
-                game.player.setLocation(undefined, game.player.posY += 0.35);
+                game.player.setLocation(undefined, game.player.posY += 0.45);
             }
         });
         window.addEventListener("keyup", function(e) {
@@ -52,16 +53,17 @@ player.prototype.animate = function(/*pStartTime*/) {
         }
         this.old_position = this.col;
         this.setLocation(newX, this.posY);
-        if (this.old_position != this.col) {
+        //if (this.old_position != this.col) {
             if (!game.obstacle.are_we_doomed_yet(this.col, this.row)){
                 game.obstacle.are_we_saved_yet(this.col, this.row);
             }
-        }
+        //}
         this.draw();
+        requestAnimFrame(function() {
+            game.player.animate(/*pStartTime*/);
+        });
     }
-    requestAnimFrame(function() {
-        game.player.animate(/*pStartTime*/);
-    });
+
 }
 player.prototype.setLocation = function(posX, posY) {
     item.prototype.setLocation.call(this, posX, posY);

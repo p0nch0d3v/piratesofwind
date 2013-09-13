@@ -27,12 +27,14 @@ game.initializeCanvas = function () {
     this.canvas.background = document.getElementById('canvasBackground');
     this.canvas.obstacles = document.getElementById('canvasObstacles');
     this.canvas.player = document.getElementById('canvasPlayer');
+    this.canvas.island = document.getElementById('canvasIsland');
     this.canvas.wind = document.getElementById('canvasWind');
     ////this.canvas.grid = document.getElementById('canvasGrid');
 
     this.canvas.backgroundContext = this.canvas.background.getContext('2d');
     this.canvas.obstaclesContext = this.canvas.obstacles.getContext('2d');
     this.canvas.playerContext = this.canvas.player.getContext('2d');
+    this.canvas.islandContext = this.canvas.island.getContext('2d');
     this.canvas.windContext = this.canvas.wind.getContext('2d');
     ////this.canvas.gridContext = this.canvas.grid.getContext('2d');
 
@@ -40,16 +42,18 @@ game.initializeCanvas = function () {
     this.cellHeight = this.canvas.background.height / this.level.getRowCount();
 
     // Calculate the margin left, due the canvas are positioned in abosolute
-    var marginLeft = (window.innerWidth - game.canvas.background.width) / 2;
+    game.marginLeft = (window.innerWidth - game.canvas.background.width) / 2;
 
-    this.canvas.background.style.marginLeft = marginLeft + "px";
-    this.canvas.obstacles.style.marginLeft = marginLeft + "px";
-    this.canvas.player.style.marginLeft = marginLeft + "px";
-    this.canvas.wind.style.marginLeft = marginLeft + "px";
+    this.canvas.background.style.marginLeft = game.marginLeft + "px";
+    this.canvas.obstacles.style.marginLeft = game.marginLeft + "px";
+    this.canvas.player.style.marginLeft = game.marginLeft + "px";
+    this.canvas.island.style.marginLeft = game.marginLeft + "px";
+    this.canvas.wind.style.marginLeft = game.marginLeft + "px";
 
     this.canvas.background.style.display = 'block';
     this.canvas.obstacles.style.display = 'block';
     this.canvas.player.style.display = 'block';
+    this.canvas.island.style.display = 'block';
     this.canvas.wind.style.display = 'block';
 
     ////this.canvas.grid.style.marginLeft = marginLeft + "px";
@@ -125,11 +129,11 @@ game.getNumberRandom = function (pMin, pMax) {
 game.initIsland = function(){
     this.island.init();
     if (this.level.direction == 'east') { // left to right
-        this.island.col = 9;
+        this.island.col = 10;
         //this.player.row = 0;
         this.island.row = this.getNumberRandom(0, this.level.getColCount() - 1);
-        var posX = this.island.col * this.cellWidth;
-        var posY = this.island.row * this.cellHeight;
+        var posX = (this.island.col -1) * this.cellWidth;
+        var posY = (this.island.row -1) * this.cellHeight;
         this.island.setLocation(posX, posY);
         this.island.draw();
     }
@@ -171,6 +175,28 @@ game.initPresentation = function(){
 
 game.hidePresentation = function(){
     game.presentation.style.display = 'none';
+}
+
+game.showInformation = function(pTitle, pContent, pButtonLabel, pButtonAction)
+{
+    var information = document.getElementById('information');
+    information.style.display = 'block';
+    information.style.marginLeft = this.marginLeft + "px";
+
+    var title = document.getElementById('information_title');
+    title.innerText = pTitle;
+
+    var content = document.getElementById('information_explanation');
+    content.innerText = pContent;
+
+    var button = document.getElementById('information_action');
+    button.value = pButtonLabel;
+    button.onclick = pButtonAction;
+}
+
+game.hideInformation = function(){
+    var information = document.getElementById('information');
+    information.style.display = 'none';
 }
 
 window.onload = function() {

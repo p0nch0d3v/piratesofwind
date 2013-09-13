@@ -23,7 +23,7 @@ canvas
 {
     z-index: 9;
 }
-#canvasPlayer
+#canvasPlayer, #canvasIsland
 {
     z-index: 10;
 }
@@ -107,6 +107,39 @@ canvas
     display: block;
 }
 #presentation #startButton
+{
+    font-size: 36px;
+    text-align: center;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+#information
+{
+    /*margin-top: 50px;*/
+    width: 860px;
+    height: 480px;
+    background: white;
+    position: absolute;
+    display: none;
+    z-index: 14;
+    color: blue;
+    opacity: 0.65;
+}
+#information #information_title
+{
+    font-size: 64px;
+    text-align: center;
+    margin-top: 25px;
+}
+#information #information_explanation
+{
+    font-size: 48px;
+    text-align: center;
+    margin-top: 25px;
+}
+#information #information_action
 {
     font-size: 36px;
     text-align: center;
